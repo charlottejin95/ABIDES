@@ -3,6 +3,7 @@ from typing import Any, Dict, List
 
 import gym
 import numpy as np
+import copy
 
 import abides_markets.agents.utils as markets_agent_utils
 from abides_core import NanosecondTime
@@ -440,13 +441,17 @@ class SubGymMarketsDailyInvestorEnv_v0(AbidesGymMarketsEnv):
         }
 
         for book, book_name in [(bids, "bids"), (asks, "asks")]:
-            for level in [0, 1, 2]:
+            for level in [str(0), str(1), str(2)]:
                 price, volume = markets_agent_utils.get_val(bids, level)
                 orderbook[book_name]["price"][level] = np.array([price]).reshape(-1)
                 orderbook[book_name]["volume"][level] = np.array([volume]).reshape(-1)
 
         # 9) order_status
         order_status = raw_state["internal_data"]["order_status"]
+        df = copy.deepcopy(order_status)
+        for key, value in df.items():
+            order_status.pop(key)
+            order_status[str(key)] = value
 
         # 10) mkt_open
         mkt_open = raw_state["internal_data"]["mkt_open"]
