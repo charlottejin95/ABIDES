@@ -1,3 +1,5 @@
+source irisma/my_env/bin/activate
+
 python3 -m pip install -r requirements.txt
 python3 -m pip install -r requirements-dev.txt
 cd abides-core
